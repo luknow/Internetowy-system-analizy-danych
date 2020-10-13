@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel='stylesheet' type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/dt-1.10.18/af-2.3.0/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.4.0/r-2.2.2/rg-1.0.3/rr-1.2.4/sc-1.5.0/sl-1.2.6/datatables.min.css"/>
+	<link type="text/css" href="../static/css/editor.dataTables.css" />
+ 	<link href="../static/css/bootstrap.min.css" rel="stylesheet" />
+	<link rel='stylesheet' type='text/css' href='../static/css/style.css' media="screen" />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+	<title>Analiza</title>
+</head>
+<body>
+<div class="sidenav">
+	<a href="https://analiza.herokuapp.com/dashboard">Panel główny</a>
+	<button class="dropdown-btn">Atrybuty
+		<i class="fa fa-caret-down"></i>
+	</button>
+	<div class="dropdown-container">
+		{% for item in columns %}
+			<a href="https://analiza.herokuapp.com/res/{{item}}">{{ item }}</a>
+		{% endfor %}
+	</div>
+	<a href="https://analiza.herokuapp.com/tests">Testy</a>
+	<a href="https://analiza.herokuapp.com/summary">Zestawienie</a>
+</div>
+<div class="main">
+	<div class="container-fluid">	
+		<div class= "row">
+			<div class="col-md-12">
+				<div class="jumbotron">
+					<h2>Statystyka</h2>
+					<p>Informacje dotyczące wybranych atrybutów zostały zamieszczone poniżej.</p>
+					<p class="text-danger small">Generowanie raportu może chwilę potrwać!</p>
+					<a href="#" id="raport-btn" class="btn btn-default">Pobierz raport</a>
+					<a href="https://analiza.herokuapp.com/revoke" class="btn btn-danger2" style="float: right;">Wyloguj się</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3 small">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+							<div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">{{ message }}</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+			</div>
+		</div>
+		<div class="row">
+			{% for chart in charts %}
+				<div class="col-md-12">
+					<img class="charts" src="data:image/png;base64,{{chart}}" width="800" height="600" alt="graph">
+				</div>
+			{% endfor %}
+			{% if info is defined %}
+				<div class="col-md-12">
+					<h2 class="text-center well">Statystyki podstawowe</h2>
+					<div id="info">{{ info.to_html(classes='table table-striped') | safe}}</div>
+				</div>
+			{% endif %}
+			{% if corr is defined %}
+				<div class="col-md-12">
+					<h2 class="text-center well">Korelacja</h2>
+					<div id="corr">{{ corr.to_html(classes='table table-striped') | safe}}</div>
+				</div>
+			{% endif %}
+			<div class="col-md-12">
+				<h2 class="text-center well">Dane</h2>
+				<table id="table_id" class="table table-striped table-bordered" style="width:100%">
+					<thead>
+						<tr>
+							{% for col in tabcols %}
+								<th>{{ col }}</th>
+							{% endfor %}
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div> 
+		</div>
+	</div>
+</div>    
+</body>
+<style>
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #2C3E50;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a, .dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #FFFFFF;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+.sidenav a:hover, .dropdown-btn:hover {
+    color: #E1E1E1;
+}
+
+.main {
+    margin-left: 200px;
+    font-size: 20px;
+    padding: 0px 10px;
+}
+
+.active {
+    background-color: #42586E;
+    color: white;
+}
+
+.dropdown-container {
+    display: none;
+    background-color: #617487;
+    padding-left: 8px;
+}
+
+.fa-caret-down {
+    float: right;
+    padding-right: 8px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+</style>
+<script src="../static/script/http_code.jquery.com_jquery-1.11.1.js"></script>	
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/dt-1.10.18/af-2.3.0/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.4.0/r-2.2.2/rg-1.0.3/rr-1.2.4/sc-1.5.0/sl-1.2.6/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="../static/script/pdfmake.js"></script>
+<script src="../static/script/vfs_fonts.js"></script>
+<script>
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+
+$('#table_id').DataTable( {
+	dom: 'lBfrtip',
+        colReorder: true,
+        buttons: [
+		'colvis',
+		{extend: 'excelHtml5', exportOptions:{columns: ':visible'}},
+		{extend: 'csvHtml5', exportOptions:{columns: ':visible'}},
+		{extend: 'pdfHtml5', exportOptions:{columns: ':visible'}}
+    ],
+	 language: {
+	 "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json",
+            buttons: {
+                colvis: 'Widoczność kolumn'
+            }
+    },
+	colReorder: {realtime: false },
+	fixedHeader: { header: true, footer: true },
+	scrollY: 400,
+    scrollX: true,
+    scrollCollapse: true,
+	select: true,
+    paging: true,
+    ajax: '/getSummaryContent'	
+} );
+
+$( "#raport-btn" ).click(function(){
+var fileTitle;
+$.ajax({
+    url         : "https://analiza.herokuapp.com/getfileTitle",
+    type        : "post",
+	async		:  false,
+    dataType    : 'json',
+})
+.done(function(response) {
+    fileTitle = response['data'];
+})
+.fail(function() {
+   fileTitle = '';
+}); 
+
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+var raportTitle = 'Raport';
+if(dd<10) {
+    dd = '0'+dd;
+} 
+if(mm<10) {
+    mm = '0'+mm;
+} 
+var date = dd + '/' + mm + '/' + yyyy;
+var hours = today.getHours();
+var minutes = today.getMinutes();
+var seconds = today.getSeconds();
+if(hours<10){
+	hours = '0'+hours;
+}
+if(minutes<10){
+	minutes = '0'+minutes;
+}
+if(seconds<10){
+	seconds = '0'+seconds;
+}
+var time = hours + ':' + minutes + ':' + seconds;
+arr = [];
+pics = []
+pics = document.getElementsByClassName("charts");
+arr2 = [];
+for(var i =0;i < pics.length;i++){
+arr2.push(pics[i].src);
+}
+arr.push("Nazwa arkusza: "+fileTitle);
+arr.push("Typ: statystyka zestawienie dla wybranych atrybutów\n");
+arr.push("Wygenerowano "+date+" o "+time+"\n\n");
+arr.push("Statystyki podstawowe\n");
+arr.push(pdfForElement('info'));
+if(document.getElementById('corr') != null){
+arr.push("\nKorelacja\n");
+arr.push(pdfForElement('corr'));
+}
+arr.push("\nWykresy\n");
+if(arr2.length == 1){
+ pdfMake.createPdf({
+ content:[ arr, {image: arr2[0], width: 800, height: 600}],
+ pageSize: 'c3'
+  }).download('Informacje zestawienie '+'['+fileTitle+']'+'.pdf');
+ }else if(arr2.length==2){
+ pdfMake.createPdf({
+ content:[ arr, {image: arr2[0], width: 800, height: 600},{image: arr2[1], width: 800, height: 600}],
+ pageSize: 'c3'
+  }).download('Informacje zestawienie '+'['+fileTitle+']'+'.pdf'); 
+ }
+ 
+function pdfForElement(id) {
+  function ParseContainer(cnt, e, p, styles) {
+    var elements = [];
+    var children = e.childNodes;
+    if (children.length != 0) {
+      for (var i = 0; i < children.length; i++) p = ParseElement(elements, children[i], p, styles);
+    }
+    if (elements.length != 0) {
+      for (var i = 0; i < elements.length; i++) cnt.push(elements[i]);
+    }
+    return p;
+  }
+
+  function ComputeStyle(o, styles) {
+    for (var i = 0; i < styles.length; i++) {
+      var st = styles[i].trim().toLowerCase().split(":");
+      if (st.length == 2) {
+        switch (st[0]) {
+          case "font-size":
+            {
+              o.fontSize = parseInt(st[1]);
+              break;
+            }
+          case "text-align":
+            {
+              switch (st[1]) {
+                case "right":
+                  o.alignment = 'right';
+                  break;
+                case "center":
+                  o.alignment = 'center';
+                  break;
+              }
+              break;
+            }
+          case "font-weight":
+            {
+              switch (st[1]) {
+                case "bold":
+                  o.bold = true;
+                  break;
+              }
+              break;
+            }
+          case "text-decoration":
+            {
+              switch (st[1]) {
+                case "underline":
+                  o.decoration = "underline";
+                  break;
+              }
+              break;
+            }
+          case "font-style":
+            {
+              switch (st[1]) {
+                case "italic":
+                  o.italics = true;
+                  break;
+              }
+              break;
+            }
+        }
+      }
+    }
+  }
+  function ParseElement(cnt, e, p, styles) {
+    if (!styles) styles = [];
+    if (e.getAttribute) {
+      var nodeStyle = e.getAttribute("style");
+      if (nodeStyle) {
+        var ns = nodeStyle.split(";");
+        for (var k = 0; k < ns.length; k++) styles.push(ns[k]);
+      }
+    }
+    switch (e.nodeName.toLowerCase()) {
+      case "#text":
+        {
+          var t = {
+            text: e.textContent.replace(/\n/g, "")
+          };
+          if (styles) ComputeStyle(t, styles);
+          p.text.push(t);
+          break;
+        }
+      case "b":
+      case "strong":
+        {
+          ParseContainer(cnt, e, p, styles.concat(["font-weight:bold"]));
+          break;
+        }
+      case "u":
+        {
+          ParseContainer(cnt, e, p, styles.concat(["text-decoration:underline"]));
+          break;
+        }
+      case "i":
+        {
+          ParseContainer(cnt, e, p, styles.concat(["font-style:italic"]));
+          break;
+        }
+      case "span":
+        {
+          ParseContainer(cnt, e, p, styles);
+          break;
+        }
+      case "br":
+        {
+          p = CreateParagraph();
+          cnt.push(p);
+          break;
+        }
+      case "table":
+        {
+          var t = {
+            table: {
+              widths: [],
+              body: []
+            }
+          }
+          var border = e.getAttribute("border");
+          var isBorder = false;
+          if (border)
+            if (parseInt(border) == 1) isBorder = true;
+          if (!isBorder) t.layout = 'noBorders';
+          ParseContainer(t.table.body, e, p, styles);
+
+          var widths = e.getAttribute("widths");
+          if (!widths) {
+            if (t.table.body.length != 0) {
+              if (t.table.body[0].length != 0)
+                for (var k = 0; k < t.table.body[0].length; k++) t.table.widths.push("*");
+            }
+          } else {
+            var w = widths.split(",");
+            for (var k = 0; k < w.length; k++) t.table.widths.push(w[k]);
+          }
+          cnt.push(t);
+          break;
+        }
+      case "tbody":
+        {
+          ParseContainer(cnt, e, p, styles);
+          break;
+        }
+	case "thead":
+        {
+          ParseContainer(cnt, e, p, styles);
+          break;
+        }
+      case "tr":
+        {
+          var row = [];
+          ParseContainer(row, e, p, styles);
+          cnt.push(row);
+          break;
+        }
+      case "td":
+        {
+          p = CreateParagraph();
+          var st = {
+            stack: []
+          }
+          st.stack.push(p);
+
+          var rspan = e.getAttribute("rowspan");
+          if (rspan) st.rowSpan = parseInt(rspan);
+          var cspan = e.getAttribute("colspan");
+          if (cspan) st.colSpan = parseInt(cspan);
+
+          ParseContainer(st.stack, e, p, styles);
+          cnt.push(st);
+          break;
+        }
+	  case "th":
+        {
+          p = CreateParagraph();
+          var st = {
+            stack: []
+          }
+          st.stack.push(p);
+
+          var rspan = e.getAttribute("rowspan");
+          if (rspan) st.rowSpan = parseInt(rspan);
+          var cspan = e.getAttribute("colspan");
+          if (cspan) st.colSpan = parseInt(cspan);
+
+          ParseContainer(st.stack, e, p, styles);
+          cnt.push(st);
+          break;
+        }
+      case "div":
+      case "p":
+        {
+          p = CreateParagraph();
+          var st = {
+            stack: []
+          }
+          st.stack.push(p);
+          ComputeStyle(st, styles);
+          ParseContainer(st.stack, e, p);
+
+          cnt.push(st);
+          break;
+        }
+      default:
+        {
+          console.log("Parsing for node " + e.nodeName + " not found");
+          break;
+        }
+    }
+    return p;
+  }
+  function ParseHtml(cnt, htmlText) {
+    var html = $(htmlText.replace(/\t/g, "").replace(/\n/g, ""));
+    var p = CreateParagraph();
+    for (var i = 0; i < html.length; i++) ParseElement(cnt, html.get(i), p);
+  }
+  function CreateParagraph() {
+    var p = {
+      text: []
+    };
+    return p;
+  }
+  content = [];
+  ParseHtml(content, document.getElementById(id).outerHTML); 
+  return content;
+}
+});
+</script>
+</html> 

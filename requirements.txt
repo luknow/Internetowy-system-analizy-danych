@@ -1,0 +1,11 @@
+Flask==0.12.2
+Pandas==0.22.0
+Scikit-learn==0.19.1
+Scipy==1.1.0
+Seaborn==0.8.1
+Matplotlib==2.2.2
+Requests==2.8.1
+google-api-python-client==1.7.3
+google-auth==1.5.0
+google-auth-httplib2==0.0.3
+google-auth-oauthlib==0.2.0

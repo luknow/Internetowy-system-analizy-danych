@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+	<link rel='stylesheet' type='text/css' href='../static/css/style.css' media="screen" />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<title>Analiza</title>
+</head>
+<body>
+<div class="sidenav">
+	<button class="dropdown-btn">
+		Atrybuty<i class="fa fa-caret-down"></i>
+	</button>
+	<div class="dropdown-container">
+		{% for column in columns %}
+			<a href="https://analiza.herokuapp.com/col/{{column}}">{{ column }}</a>
+		{% endfor %}
+	</div>
+</div>
+<div class="main">
+	<div class="container-fluid">	
+		<div class= "row">
+			<div class="col-md-12">
+				<div class="jumbotron">
+					<h2>Preprocessing</h2>
+					<p>W celu uzyskania informacji wskaż atrybut znajdujący się po lewej stronie ekranu.</p>
+					<p>Po dokonaniu zmian wybierz przycisk dalej.</p>
+					<p><span class="label label-success">Etap: 3/4</span></p>
+					<a href="https://analiza.herokuapp.com/dashboard" class="btn btn-info">Dalej</a>
+					<a href="https://analiza.herokuapp.com/revoke" class="btn btn-danger2" style="float: right;">Wyloguj się</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3 small">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+							<div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">{{ message }}</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+			</div>
+		</div>
+		{% if data is defined %}
+			<div class="row">
+				{% if outliers is defined %}
+					<div class="col-md-4">
+						<div class="panel panel-default">
+							<div class="panel-heading text-center"><span class="label label-primary">Wartości odstające</span></div>
+							<div class="panel-body">
+								<form action ="https://analiza.herokuapp.com/deleteOutliers" method = "post" class="form-horizontal ">
+									<fieldset>
+										{% for value in outliers %}
+											<span class="label label-warning">{{value}}</span>
+										{% endfor %}
+										<input type="hidden" class="form-control" name="columnName" value="{{columnName}}">
+										<div class="form-group">
+											<div class="col-lg-12">
+												<button type="submit" class="btn btn-primary" style="float: right;">Usuń</button>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">   
+						<div class="panel panel-default">
+							<div class="panel-heading text-center"><span class="label label-primary">Usuwanie pustych wartości</span></div>
+							<div class="panel-body">
+								<form action ="https://analiza.herokuapp.com/missingValues" method = "post" class="form-horizontal ">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<div class="radio">
+												<label>
+													<input type="radio" name="method" id="optionsRadios1" value="Drop" checked="">
+													<abbr title="Działa dla całego zbioru. Usunie dane, gdy w kolumnie wystąpi co najmniej jedna pusta wartość. Nie polecane, gdy występuje wiele pustych wartości, ponieważ usunie większość danych.">Usuń puste wartości</abbr>
+												</label>
+											</div>
+											<div class="radio">
+												<label>
+													<input type="radio" name="method" id="optionsRadios2" value="Frequent">
+													<abbr title="Działa dla wybranej kolumny. Zastępuje każdą pustą wartość wartością najczęściej występującą.">Najczęściej występująca</abbr>
+												</label>
+											</div>
+										</div>
+									</div>
+									<input type="hidden" class="form-control" name="columnName" value="{{columnName}}">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<button type="submit" class="btn btn-primary" style="float: right;">Zatwierdź</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel panel-default">
+							<div class="panel-heading text-center"><span class="label label-primary">Wyszukaj i zamień</span></div>
+							<div class="panel-body">
+								<form action ="https://analiza.herokuapp.com/changeValues" method = "post" class="form-horizontal ">
+									<fieldset>
+										<div class="form-group">
+											<div class="col-lg-12">
+												<input type="text" class="form-control" name="oldValue" placeholder="Wyszukaj wyraz...">
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-lg-12">
+												<input type="text" class="form-control" name="newValue" placeholder="Zamień na...">
+											</div>
+										</div>
+										<input type="hidden" class="form-control" name="columnName" value="{{columnName}}">
+										<div class="form-group">
+											<div class="col-lg-12">
+												<button type="submit" class="btn btn-primary" style="float: right;">Zatwierdź</button>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 data-container">
+						{{ data.to_html(classes='table table-striped') | safe}}
+					</div>
+				{% else %}
+					<div class="col-md-4 data-container">
+						{{ data.to_html(classes='table table-striped') | safe}}
+					</div>
+					<div class="col-md-4">   
+						<div class="panel panel-default">
+							<div class="panel-heading text-center"><span class="label label-primary">Usuwanie pustych wartości</span></div>
+							<div class="panel-body">
+								<form action ="https://analiza.herokuapp.com/missingValues" method = "post" class="form-horizontal ">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<div class="radio">
+												<label>
+													<input type="radio" name="method" id="optionsRadios1" value="Drop" checked="">
+													<abbr title="Działa dla całego zbioru. Usunie dane, gdy w kolumnie wystąpi co najmniej jedna pusta wartość. Nie polecane, gdy występuje wiele pustych wartości, ponieważ usunie większość danych.">Usuń puste wartości</abbr>
+												</label>
+											</div>
+											<div class="radio">
+												<label>
+													<input type="radio" name="method" id="optionsRadios2" value="Frequent">
+													<abbr title="Działa dla wybranej kolumny. Zastępuje każdą pustą wartość wartością najczęściej występującą.">Najczęściej występująca</abbr>
+												</label>
+											</div>
+										</div>
+									</div>
+									<input type="hidden" class="form-control" name="columnName" value="{{columnName}}">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<button type="submit" class="btn btn-primary" style="float: right;">Zatwierdź</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel panel-default">
+							<div class="panel-heading text-center"><span class="label label-primary">Wyszukaj i zamień</span></div>
+							<div class="panel-body">
+								<form action ="https://analiza.herokuapp.com/changeValues" method = "post" class="form-horizontal ">
+									<fieldset>
+										<div class="form-group">
+											<div class="col-lg-12">
+												<input type="text" class="form-control" id="inputEmail" name="oldValue" placeholder="Wyszukaj wyraz...">
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-lg-12">
+												<input type="text" class="form-control" id="inputPassword" name="newValue" placeholder="Zamień na...">
+											</div>
+										</div>
+										<input type="hidden" class="form-control" name="columnName" value="{{columnName}}">
+										<div class="form-group">
+											<div class="col-lg-12">
+												<button type="submit" class="btn btn-primary" style="float: right;">Zatwierdź</button>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				</div>
+			</div>
+		{% endif %}
+</div>   
+</body>
+<style>
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #2C3E50;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a, .dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #FFFFFF;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+.sidenav a:hover, .dropdown-btn:hover {
+    color: #E1E1E1;
+}
+
+.main {
+    margin-left: 200px;
+    font-size: 20px;
+    padding: 0px 10px;
+}
+
+.active {
+    background-color: #42586E;
+    color: white;
+}
+
+.dropdown-container {
+    display: none;
+    background-color: #617487;
+    padding-left: 8px;
+}
+
+.fa-caret-down {
+    float: right;
+    padding-right: 8px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+</style>
+<script src="../static/script/http_code.jquery.com_jquery-1.11.1.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>	
+<script src="../static/script/menu.js"></script>
+<script>
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+</script>
+</html> 
