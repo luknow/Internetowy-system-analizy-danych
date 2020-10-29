@@ -78,47 +78,47 @@ numeric attribute,</li>
   </ul>
   <li>informations for every attribute,</li>
     <ul>
-      <li>aplikacja musi wyświetlić korelację uwzględniając wszystkie atrybuty typu liczbowego (jeżeli arkusz posiada atrybuty typu liczbowego),</li>
-      <li>aplikacja musi wyświetlić następujące informacje:</li>
+      <li>application must display correlation between all numeric attributes (if sheet contains any),</li>
+      <li>application must display informations:</li>
         <ol type="a">
-          <li>jeżeli arkusz posiada atrybuty typu liczbowego – jak podano w pkt. 4 ppkt. (a),</li>
-          <li>jeżeli arkusz nie posiada atrybutów typu liczbowego to uwzględniając wszystkie atrybuty typu tekstowego – jak podano w pkt. 4 ppkt. (b).</li>
+          <li>if sheet contains numeric attributes – as in section 4 subsection (a),</li>
+          <li>if sheet does not contain any numeric attribute for all text attributes – as in section 4 subsection (b).</li>
         </ol>
-      <li>aplikacja musi przedstawić wartości arkusza w postaci tabeli,</li>
-      <li>aplikacja musi umożliwić eksport wartości wybranego arkusza do następujących formatów:</li>
+      <li>application must display sheet's values in table,</li>
+      <li>user must be able to download sheet's values as:</li>
         <ul style="list-style-type:square">
          <li>CSV,</li>
          <li>EXCEL,</li>
          <li>PDF.</li>
         </ul>
-      <li>aplikacja musi umożliwić pobranie raportu dla wszystkich atrybutów zawierającego informacje jak podano w pkt. 5 z uwzględnieniem warunku dla ppkt. (a) oraz ppkt. (b).</li>
+      <li>user must be able to generate report that contains informations as in section 5 (condition subsection (a), subsection (b)) for all attributes</li>
     </ul>
-  <li>testy statystyczne,</li>
+  <li>statistical tests,</li>
     <ul>
-      <li>aplikacja musi umożliwić przeprowadzenie następujących testów statystycznych dla wybranych przez użytkownika atrybutów (minimalnie 2, maksymalnie 5 atrybutów):</li>
+      <li>user must be able to perform statistical tests for choosen attributes (min 2 attributes, max 5 attributes):</li>
         <ul style="list-style-type:square">
-          <li>Chi-kwadrat,</li>
+          <li>Chi-squared,</li>
           <li>Kruskal-Wallis,</li>
           <li>U Mann-Whitney,</li>
-          <li>Korelacja Rho-Spearmana.</li>
+          <li>Spearman's rank correlation coefficient.</li>
         </ul>
-      <li>aplikacja po przeprowadzeniu testu musi wyświetlić następujące informacje:</li>
+      <li>after the test has been performed system must display informations:</li>
          <ol type="a">
-           <li>Chi-kwadrat, Kruskal-Wallis, U Mann-Whitney,</li>
+           <li>Chi-squared, Kruskal-Wallis, U Mann-Whitney,</li>
             <ul style="list-style-type:square">
-              <li>hipotezy statystyczne,</li>
-              <li>wartość testu,</li>
-              <li>wartość p,</li>
-              <li>decyzja.</li>
+              <li>statistical hypothesis,</li>
+              <li>test value,</li>
+              <li>p value,</li>
+              <li>decision.</li>
             </ul>
-           <li>Korelacja Rho-Spearmana.</li>
+           <li>Spearman's rank correlation coefficient.</li>
             <ul style="list-style-type:square">
-              <li>wartość testu,</li>
-              <li>wartość p,</li>
-              <li>decyzja.</li>
+              <li>test value,</li>
+              <li>p value,</li>
+              <li>decision.</li>
            </ul>
          </ol>
-      <li>aplikacja po przeprowadzeniu testu  musi wyświetlić wykres pudełkowy,</li>
+      <li>after the test has been performed system must display box plot,</li>
 <li>aplikacja musi umożliwić pobranie raportu przeprowadzonych testów zawierającego wykres pudełkowy oraz informacje jak podano w pkt. 6 z uwzględnieniem warunku dla ppkt. (a) oraz ppkt. (b).</li>
     </ul>
   <li>zestawienie atrybutów.</li>
