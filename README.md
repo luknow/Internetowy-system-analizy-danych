@@ -138,6 +138,7 @@ numeric attribute,</li>
 </ol>
 
 <br>
+
 # Internetowy system analizy danych
 Przejdź do systemu: https://analiza.herokuapp.com <br>
 lub zobacz filmiki: https://drive.google.com/drive/folders/1M5OEleX_Alq8HhVI8e1duj1q2D9dvA-l
