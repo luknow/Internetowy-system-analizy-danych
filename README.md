@@ -35,9 +35,9 @@ The main purpose of this application is to let people analyze Google forms answe
   <li>data pre-processing,</li>
   <ul>
     <li>user must be able to replace blank values,</li>
-    <li>application must display outliers for choosen 
+    <li>application must display outliers for selected 
 numeric attribute,</li>
-    <li>user must be able to search and replace values for choosen attribute.</li>
+    <li>user must be able to search and replace values for selected attribute.</li>
   </ul>
   <li>attribute informations,</li>
   <ul>
@@ -62,15 +62,15 @@ numeric attribute,</li>
          <li>the cardinality of the most common value.</li>
         </ul>
      </ol> 
-    <li>application must display choosen attribute values,</li>
-    <li>application must provide export choosen attribute values to:</li>
+    <li>application must display selected attribute values,</li>
+    <li>application must provide export selected attribute values to:</li>
      <ul style="list-style-type:square">
          <li>CSV,</li>
          <li>EXCEL,</li>
          <li>PDF.</li>
         </ul>
-    <li>application must display bar charts and box plot for choosen attribute,</li>
-    <li>user must be able to download report generated for choosen attribute that contains box plot, bar chart and informations:</li>
+    <li>application must display bar charts and box plot for selected attribute,</li>
+    <li>user must be able to download report generated for selected attribute that contains box plot, bar chart and informations:</li>
      <ul style="list-style-type:square">
        <li>numeric attribute – as in section 4 subsection (a),</li>
        <li>text attribute – as in  section 4 subsection (b).</li>
@@ -95,7 +95,7 @@ numeric attribute,</li>
     </ul>
   <li>statistical tests,</li>
     <ul>
-      <li>user must be able to perform statistical tests for choosen attributes (min 2 attributes, max 5 attributes):</li>
+      <li>user must be able to perform statistical tests for selected attributes (min 2 attributes, max 5 attributes):</li>
         <ul style="list-style-type:square">
           <li>Chi-squared,</li>
           <li>Kruskal-Wallis,</li>
@@ -119,21 +119,21 @@ numeric attribute,</li>
            </ul>
          </ol>
       <li>after the test has been performed system must display box plot,</li>
-<li>aplikacja musi umożliwić pobranie raportu przeprowadzonych testów zawierającego wykres pudełkowy oraz informacje jak podano w pkt. 6 z uwzględnieniem warunku dla ppkt. (a) oraz ppkt. (b).</li>
+<li>user must be able to download report that contains results of performed tests, box plot and informations as in section 6 (with condition subsection (a), subsection (b).</li>
     </ul>
-  <li>zestawienie atrybutów.</li>
+  <li>list of attributes.</li>
      <ul>
-       <li>aplikacja musi umożliwić uzyskanie informacji dla wybranych przez użytkownika atrybutów (minimalnie 2, maksymalnie 5 atrybutów),</li>
-       <li>aplikacja musi wyświetlić informacje jak podano w pkt. 4 ppkt. (a),</li>
-       <li>jeżeli wśród wybranych przez użytkownika atrybutów znajduje się co najmniej jeden atrybut typu liczbowego to aplikacja musi wyświetlić korelację,</li>
-       <li>aplikacja musi wyświetlić wartości wybranych atrybutów w postaci tabeli,</li>
-       <li>aplikacja musi umożliwić eksport wartości wybranych atrybutów do następujących formatów:</li>
+       <li>user must be able to obtain informations for selected attributes (min 2, max 5 attributes),</li>
+       <li>application must display informations as in section 4 subsection (a),</li>
+       <li>if user selected at least one numerical attribute application must display correlation,</li>
+       <li>application must display values of selected attributes in table,</li>
+       <li>application must provide export selected attribute values to::</li>
         <ul style="list-style-type:square">
          <li>CSV,</li>
          <li>EXCEL,</li>
          <li>PDF.</li>
          </ul>
-       <li>aplikacja musi umożliwić pobranie raportu zawierającego informacje jak podano w pkt. 4 ppkt. (a). Jeżeli wśród wybranych przez użytkownika atrybutów znajduje się co najmniej jeden atrybut typu liczbowego to raport dodatkowo musi zawierać korelację.</li>
+       <li>user must be able to download report that contains informations as in section 4 subsection (a). If user selected at least one numeric attribute report must contain correlation.</li>
      </ul>
 </ol>
 
