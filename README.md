@@ -1,6 +1,6 @@
 # Web system to analyze data
 go to application: https://analiza.herokuapp.com <br>
-see game videos: https://drive.google.com/drive/folders/1M5OEleX_Alq8HhVI8e1duj1q2D9dvA-l
+see application videos: https://drive.google.com/drive/folders/1M5OEleX_Alq8HhVI8e1duj1q2D9dvA-l
 
 <h2>Application description</h2>
 The main purpose of this application is to let people analyze Google forms answers, but user can also analyze any Excel sheet that has been previously uploaded from Google drive. 
